@@ -109,9 +109,10 @@ async function main() {
 async function mintOnPolkadot(api, relayer, destination, amount) {
     try {
         // 3. Convert Amount (Stellar 7 decimals -> Westend 12 decimals)
-        // 1 XLM (10^7) -> 1 WND (10^12) => Multiply by 10^5
+        // 1 XLM (10^7) -> 0.01 WND (10^10) => Multiply by 1000
+        // This prevents draining the relayer too fast during testing.
         const amountBigInt = BigInt(amount);
-        const amountDOT = amountBigInt * BigInt(100000);
+        const amountDOT = amountBigInt * BigInt(1000);
 
         // Check Relayer Balance
         const { data: balance } = await api.query.system.account(relayer.address);
